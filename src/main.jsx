@@ -7,8 +7,12 @@ import "./styles/starwars.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
 
+import { StoreProvider } from "./store.jsx";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
-		<RouterProvider router={router} />
+		<StoreProvider>
+			<RouterProvider router={router} />
+		</StoreProvider>
 	</React.StrictMode>
 );

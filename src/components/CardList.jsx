@@ -1,6 +1,12 @@
 import { Card } from "./Card";
 
-export const CardList = ({ title, items, type }) => {
+export const CardList = ({
+	title,
+	items,
+	type,
+	actions
+}) => {
+
 	return (
 		<section className="mb-5">
 
@@ -10,11 +16,12 @@ export const CardList = ({ title, items, type }) => {
 
 			<div className="cards-container">
 
-				{items.map((item) => (
+				{items?.map((item) => (
 					<Card
 						key={item.uid}
 						item={item}
 						type={type}
+						actions={actions}
 					/>
 				))}
 
