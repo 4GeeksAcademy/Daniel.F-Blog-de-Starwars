@@ -1,6 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import {
+	useContext,
+	useEffect,
+	useState
+} from "react";
 
-import { Navbar } from "../components/Navbar";
+import {
+	StoreContext
+} from "../store.jsx";
 
 import {
 	getPeople,
@@ -12,34 +18,37 @@ import { Hero } from "../components/Hero";
 import { CardList } from "../components/CardList";
 import { Loader } from "../components/Loader";
 
-import { StoreContext } from "../store.jsx";
-
 export const Home = () => {
 
-	const { store, actions } = useContext(StoreContext);
+	const { store, actions } =
+		useContext(StoreContext);
 
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] =
+		useState(false);
 
 	useEffect(() => {
 
 		const loadData = async () => {
 
 			if (
-				store.people.length > 0 &&
-				store.planets.length > 0 &&
-				store.starships.length > 0
+				store.people.length &&
+				store.planets.length &&
+				store.starships.length
 			) {
 				return;
 			}
 
 			setLoading(true);
 
-			const [people, planets, starships] =
-				await Promise.all([
-					getPeople(),
-					getPlanets(),
-					getStarships()
-				]);
+			const [
+				people,
+				planets,
+				starships
+			] = await Promise.all([
+				getPeople(),
+				getPlanets(),
+				getStarships()
+			]);
 
 			actions.setPeople(people);
 			actions.setPlanets(planets);
@@ -56,36 +65,27 @@ export const Home = () => {
 
 	return (
 
-		<div>
+		<div className="container-fluid">
 
-			<Navbar />
+			<Hero />
 
-			<div className="container py-4">
+			<CardList
+				title="Characters"
+				items={store.people}
+				type="characters"
+			/>
 
-				<Hero />
+			<CardList
+				title="Planets"
+				items={store.planets}
+				type="planets"
+			/>
 
-				<CardList
-					title="Characters"
-					items={store.people}
-					type="characters"
-					actions={actions}
-				/>
-
-				<CardList
-					title="Planets"
-					items={store.planets}
-					type="planets"
-					actions={actions}
-				/>
-
-				<CardList
-					title="Starships"
-					items={store.starships}
-					type="starships"
-					actions={actions}
-				/>
-
-			</div>
+			<CardList
+				title="Starships"
+				items={store.starships}
+				type="starships"
+			/>
 
 		</div>
 	);
