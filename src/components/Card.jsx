@@ -1,42 +1,37 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { StoreContext } from "../store.jsx";
 
-const getImageUrl = (type, uid) => {
-	return `https://starwars-visualguide.com/assets/img/${type}/${uid}.jpg`;
-};
+export const Card = ({ item, type }) => {
 
-export const Card = ({ item, type, actions }) => {
+	const { store, actions } =
+		useContext(StoreContext);
 
-	const isFavorite = actions.isFavorite(item.name);
+	const isFavorite =
+		store.favorites.some(
+			(fav) => fav.uid === item.uid
+		);
 
 	return (
-		<div className="card-sw p-3">
+
+		<div className="sw-card">
 
 			<img
-				src={getImageUrl(type, item.uid)}
+				src={item.image}
 				alt={item.name}
-				className="card-img"
-				onError={(e) => {
-					e.target.src =
-						"https://starwars-visualguide.com/assets/img/big-placeholder.jpg";
-				}}
 			/>
 
-			<h4 className="mt-3">
-				{item.name}
-			</h4>
+			<h3>{item.name}</h3>
 
-			<div className="d-flex justify-content-between mt-3">
-
-				<Link
-					to={`/details/${type}/${item.uid}`}
-					className="btn btn-warning"
-				>
-					Learn more
-				</Link>
+			<div className="card-actions">
 
 				<button
-					className="btn btn-outline-light"
-					onClick={() => actions.toggleFavorite(item.name)}
+					onClick={() =>
+						actions.toggleFavorite({
+							uid: item.uid,
+							name: item.name,
+							type
+						})
+					}
 				>
 					{
 						isFavorite

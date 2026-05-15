@@ -1,34 +1,20 @@
-import { createContext, useState, useEffect } from "react";
+toggleFavorite: (item) => {
 
-export const StoreContext = createContext();
+	setStore((prev) => {
 
-export const StoreProvider = ({ children }) => {
+		const exists =
+			prev.favorites.some(
+				(fav) => fav.uid === item.uid
+			);
 
-	const [store, setStore] = useState({
-		people: [],
-		planets: [],
-		starships: [],
-		favorites: []
+		return {
+			...prev,
+
+			favorites: exists
+				? prev.favorites.filter(
+					(fav) => fav.uid !== item.uid
+				)
+				: [...prev.favorites, item]
+		};
 	});
-
-	const actions = {
-		setPeople: (data) =>
-			setStore(prev => ({ ...prev, people: data })),
-
-		setPlanets: (data) =>
-			setStore(prev => ({ ...prev, planets: data })),
-
-		setStarships: (data) =>
-			setStore(prev => ({ ...prev, starships: data })),
-
-isFavorite: (name) => {
-	return store.favorites.includes(name);
 }
-	};
-
-	return (
-		<StoreContext.Provider value={{ store, actions }}>
-			{children}
-		</StoreContext.Provider>
-	);
-};
